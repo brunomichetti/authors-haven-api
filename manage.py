@@ -6,7 +6,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    #   Define in manage.py, local as default
+    # -Define in manage.py, local as default
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "authors_api.settings.local")
     try:
         from django.core.management import execute_from_command_line

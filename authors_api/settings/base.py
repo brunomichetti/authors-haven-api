@@ -4,18 +4,18 @@ from pathlib import Path
 
 env = environ.Env()
 
-#  Use environ. Define ROOT_DIR this way
+# -Use environ. Define ROOT_DIR this way
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
 APPS_DIR = ROOT_DIR / "core_apps"
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-#  Define DEBUG in env var
+# -Define DEBUG in env var
 DEBUG = env.bool("DJANGO_DEBUG", default=False)
 
 
-#  Split INSTALLED_APPS in Django, local, and third party apps
+# -Split INSTALLED_APPS in Django, local, and third party apps
 DJANGO_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -59,7 +59,7 @@ ROOT_URLCONF = "authors_api.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        #  Define templates dir
+        # -Define templates dir
         "DIRS": [str(APPS_DIR / "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -78,11 +78,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "authors_api.wsgi.application"
 
-DATABASES = {
-    "default": env.db("DATABASE_URL"),
-    #  Define atomic requests
-    "ATOMIC_REQUESTS": True,
-}
+DATABASES = {"default": env.db("DATABASE_URL")}
+# -Define atomic requests
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
@@ -106,10 +104,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
@@ -120,17 +114,17 @@ USE_L10N = True
 
 USE_TZ = True
 
-#   Since we use sites, declare SITES_ID
+# -Since we use sites, declare SITES_ID
 SITE_ID = 1
 
-#   Define admin url
+# -Define admin url
 ADMIN_URL = env.str("DJANGO_ADMIN_URL")
 
-#   Define admin list
+# -Define admin list
 ADMINS = ["admin@mail.com"]
 MANAGERS = ADMINS
 
-#   Configure static files
+# -Configure static files
 STATIC_URL = "/staticfiles/"
 STATIC_ROOT = str(ROOT_DIR / "staticfiles")
 STATICFILES_DIR = []
@@ -139,7 +133,7 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-#   Configure media files
+# -Configure media files
 MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = str(ROOT_DIR / "mediafiles")
 
@@ -150,5 +144,29 @@ MEDIA_ROOT = str(ROOT_DIR / "mediafiles")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-#   Since using corsheaders, define cors headers regular expression
+# -Since using corsheaders, define cors headers regular expression
 CORS_URLS_REGEX = r"^/api/.*$"
+
+
+# -Configure logging
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            # -This is the way we want to see the log messages
+            # -Example: WARNING django.request 2022-06-29 13:59:13,925 log 9907 123145466843136 Not Found: /sasasas
+            "format": "%(levelname)s %(name)-12s %(asctime)s %(module)s "
+            "%(process)d %(thread)d %(message)s"
+        }
+    },
+    "handlers": {
+        # -To see the errors in the console after executing runserver
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        }
+    },
+    "root": {"level": "INFO", "handlers": ["console"]},
+}
