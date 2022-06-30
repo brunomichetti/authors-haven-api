@@ -155,7 +155,8 @@ LOGGING = {
     "formatters": {
         "verbose": {
             # -This is the way we want to see the log messages
-            # -Example: WARNING django.request 2022-06-29 13:59:13,925 log 9907 123145466843136 Not Found: /sasasas
+            # -Example when accessing invalid url:
+            # - WARNING django.request 2022-06-29 13:59:13,925 log 9907 123145466843136 Not Found: /sasasas
             "format": "%(levelname)s %(name)-12s %(asctime)s %(module)s "
             "%(process)d %(thread)d %(message)s"
         }
